@@ -2,10 +2,13 @@ import os
 from tkinter import *
 from tkinter import ttk
 
-def run_protocol(receptor, ligand, out, log, center_x, center_y, center_z, size_x, size_y, size_z, energy_range, exhaustiveness, directory_path):
+def run_protocol(receptor, ligand, name, center_x, center_y, center_z, size_x, size_y, size_z, energy_range, exhaustiveness, directory_path):
     # Create the full path for the config file
     config_file_path = os.path.join(directory_path, "config.txt")
     command_code_file_path = os.path.join(directory_path, "command_code.txt")
+    
+    out = f"OUTPUT_{name}.pdbqt"
+    log = f"LOG_{name}.txt"
     
     # Generate config content with user input
     config_content = f"""receptor = "{receptor}"
@@ -41,7 +44,7 @@ exhaustiveness = {exhaustiveness}
 
 def on_button_click():
     root = Tk()
-    root.title("super slay docking machine")
+    root.title("Super Slay Docking Machine")
 
     Label(root, text="Enter the directory where you want to save the files:").grid(row=0, column=0)
     directory_entry = Entry(root)
@@ -67,13 +70,9 @@ def on_button_click():
         ligand_menu = OptionMenu(root, ligand_var, *files)
         ligand_menu.grid(row=2, column=1, padx=10, pady=5, sticky=(W, E))
 
-        Label(root, text="Enter the value for 'out' (.pdbqt):").grid(row=3, column=0)
-        out_entry = Entry(root)
-        out_entry.grid(row=3, column=1)
-
-        Label(root, text="Enter the value for 'log' (.txt):").grid(row=4, column=0)
-        log_entry = Entry(root)
-        log_entry.grid(row=4, column=1)
+        Label(root, text="Enter the name for Output/Log:").grid(row=3, column=0)
+        name_entry = Entry(root)
+        name_entry.grid(row=3, column=1)
 
         center_x_default = StringVar(root, value="0")
         center_y_default = StringVar(root, value="0")
@@ -84,43 +83,42 @@ def on_button_click():
         energy_range_default = StringVar(root, value="4")
         exhaustiveness_default = StringVar(root, value="8")
 
-        Label(root, text="Enter the value for 'center_x':").grid(row=5, column=0)
+        Label(root, text="Enter the value for 'center_x':").grid(row=4, column=0)
         center_x_entry = Entry(root, textvariable=center_x_default)
-        center_x_entry.grid(row=5, column=1)
+        center_x_entry.grid(row=4, column=1)
 
-        Label(root, text="Enter the value for 'center_y':").grid(row=6, column=0)
+        Label(root, text="Enter the value for 'center_y':").grid(row=5, column=0)
         center_y_entry = Entry(root, textvariable=center_y_default)
-        center_y_entry.grid(row=6, column=1)
+        center_y_entry.grid(row=5, column=1)
 
-        Label(root, text="Enter the value for 'center_z':").grid(row=7, column=0)
+        Label(root, text="Enter the value for 'center_z':").grid(row=6, column=0)
         center_z_entry = Entry(root, textvariable=center_z_default)
-        center_z_entry.grid(row=7, column=1)
+        center_z_entry.grid(row=6, column=1)
 
-        Label(root, text="Enter the value for 'size_x':").grid(row=8, column=0)
+        Label(root, text="Enter the value for 'size_x':").grid(row=7, column=0)
         size_x_entry = Entry(root, textvariable=size_x_default)
-        size_x_entry.grid(row=8, column=1)
+        size_x_entry.grid(row=7, column=1)
 
-        Label(root, text="Enter the value for 'size_y':").grid(row=9, column=0)
+        Label(root, text="Enter the value for 'size_y':").grid(row=8, column=0)
         size_y_entry = Entry(root, textvariable=size_y_default)
-        size_y_entry.grid(row=9, column=1)
+        size_y_entry.grid(row=8, column=1)
 
-        Label(root, text="Enter the value for 'size_z':").grid(row=10, column=0)
+        Label(root, text="Enter the value for 'size_z':").grid(row=9, column=0)
         size_z_entry = Entry(root, textvariable=size_z_default)
-        size_z_entry.grid(row=10, column=1)
+        size_z_entry.grid(row=9, column=1)
 
-        Label(root, text="Enter the value for 'energy_range':").grid(row=11, column=0)
+        Label(root, text="Enter the value for 'energy_range':").grid(row=10, column=0)
         energy_range_entry = Entry(root, textvariable=energy_range_default)
-        energy_range_entry.grid(row=11, column=1)
+        energy_range_entry.grid(row=10, column=1)
 
-        Label(root, text="Enter the value for 'exhaustiveness':").grid(row=12, column=0)
+        Label(root, text="Enter the value for 'exhaustiveness':").grid(row=11, column=0)
         exhaustiveness_entry = Entry(root, textvariable=exhaustiveness_default)
-        exhaustiveness_entry.grid(row=12, column=1)
+        exhaustiveness_entry.grid(row=11, column=1)
 
         def generate_files():
             receptor = receptor_var.get()
             ligand = ligand_var.get()
-            out = out_entry.get() + ".pdbqt"
-            log = log_entry.get() + ".txt"
+            name = name_entry.get()
             center_x = float(center_x_entry.get())
             center_y = float(center_y_entry.get())
             center_z = float(center_z_entry.get())
@@ -132,7 +130,7 @@ def on_button_click():
 
             directory = directory_entry.get()
 
-            run_protocol(receptor, ligand, out, log, center_x, center_y, center_z, size_x, size_y, size_z, energy_range, exhaustiveness, directory)
+            run_protocol(receptor, ligand, name, center_x, center_y, center_z, size_x, size_y, size_z, energy_range, exhaustiveness, directory)
 
         Button(root, text="Generate Files", command=generate_files).grid(row=13, column=0, columnspan=2)
 
